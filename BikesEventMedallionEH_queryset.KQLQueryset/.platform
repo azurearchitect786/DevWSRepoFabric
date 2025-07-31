@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLQueryset",
+    "displayName": "BikesEventMedallionEH_queryset",
+    "description": "BikesEventMedallionEH_queryset"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f7357cb6-03d9-8111-490e-13ae5fcbcd68"
+  }
+}
