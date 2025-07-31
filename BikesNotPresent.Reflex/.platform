@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Reflex",
+    "displayName": "BikesNotPresent"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "83d17b8e-bdbd-a2b4-4345-f072ca9d9b5c"
+  }
+}

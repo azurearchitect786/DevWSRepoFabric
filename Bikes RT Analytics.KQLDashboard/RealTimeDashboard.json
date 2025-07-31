@@ -1,0 +1,182 @@
+{
+  "schema_version": "60",
+  "tiles": [
+    {
+      "id": "68a438a0-4514-484b-90f3-bf08c67fad1d",
+      "title": "No of Bikes by BikepointID",
+      "visualType": "column",
+      "pageId": "2c03db71-6202-4016-99dc-d08d5aeb2d7c",
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "width": 9,
+        "height": 17
+      },
+      "queryRef": {
+        "kind": "query",
+        "queryId": "a38a4d36-ba39-4ee9-8ae8-a260f93188ff"
+      },
+      "visualOptions": {
+        "xColumn": "BikepointID",
+        "multipleYAxes": {
+          "additional": [],
+          "showMultiplePanels": false,
+          "base": {
+            "horizontalLines": [],
+            "yAxisScale": "linear",
+            "yAxisMaximumValue": null,
+            "yAxisMinimumValue": null,
+            "columns": [],
+            "label": "",
+            "id": "-1"
+          }
+        },
+        "yColumns": [
+          "No_Bikes"
+        ],
+        "seriesColumns": null,
+        "anomalyColumns": null,
+        "map__longitudeColumn": "BikepointID",
+        "map__latitudeColumn": "No_Bikes",
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 10
+        }
+      }
+    },
+    {
+      "id": "16c245de-f205-4cf5-b78d-d3bf53970c6f",
+      "title": "Bike locations Map",
+      "visualType": "map",
+      "pageId": "2c03db71-6202-4016-99dc-d08d5aeb2d7c",
+      "layout": {
+        "x": 9,
+        "y": 0,
+        "width": 14,
+        "height": 17
+      },
+      "queryRef": {
+        "kind": "query",
+        "queryId": "6394b503-6c9b-49bc-a0d5-fd9991278ab0"
+      },
+      "visualOptions": {
+        "map__type": "bubble",
+        "map__latitudeColumn": "Latitude",
+        "map__longitudeColumn": "Longitude",
+        "map__labelColumn": "BikepointID",
+        "map__sizeColumn": null,
+        "map__sizeDisabled": false,
+        "map__geoType": "numeric",
+        "map__geoPointColumn": null
+      }
+    },
+    {
+      "id": "da95bef9-a6de-4b00-8cca-6612aa14b449",
+      "title": "Max Bikes by Street",
+      "visualType": "column",
+      "pageId": "2c03db71-6202-4016-99dc-d08d5aeb2d7c",
+      "layout": {
+        "x": 0,
+        "y": 17,
+        "width": 9,
+        "height": 7
+      },
+      "queryRef": {
+        "kind": "query",
+        "queryId": "c4534635-b744-494a-8b0f-ef57acaea8f8"
+      },
+      "visualOptions": {
+        "multipleYAxes": {
+          "base": {
+            "id": "-1",
+            "label": "",
+            "columns": [],
+            "yAxisMaximumValue": null,
+            "yAxisMinimumValue": null,
+            "yAxisScale": "linear",
+            "horizontalLines": []
+          },
+          "additional": [],
+          "showMultiplePanels": false
+        },
+        "hideLegend": false,
+        "legendLocation": "bottom",
+        "xColumnTitle": "",
+        "xColumn": null,
+        "yColumns": null,
+        "seriesColumns": null,
+        "xAxisScale": "linear",
+        "verticalLine": "",
+        "crossFilter": [],
+        "crossFilterDisabled": false,
+        "drillthroughDisabled": false,
+        "drillthrough": []
+      }
+    }
+  ],
+  "baseQueries": [],
+  "parameters": [
+    {
+      "kind": "duration",
+      "id": "d25901b2-fda8-4c3f-9dc6-d2f3684268ec",
+      "displayName": "Time range",
+      "description": "",
+      "beginVariableName": "_startTime",
+      "endVariableName": "_endTime",
+      "defaultValue": {
+        "kind": "dynamic",
+        "count": 1,
+        "unit": "hours"
+      },
+      "showOnPages": {
+        "kind": "all"
+      }
+    }
+  ],
+  "dataSources": [
+    {
+      "id": "cd4fde37-a9b4-4c5b-9b83-01029f18b4b3",
+      "kind": "kusto-trident",
+      "scopeId": "kusto-trident",
+      "clusterUri": "",
+      "database": "975cd672-8a0d-b33b-416d-064892d29f7e",
+      "name": "BikesEventMedallionEH",
+      "workspace": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "pages": [
+    {
+      "name": "Page 1",
+      "id": "2c03db71-6202-4016-99dc-d08d5aeb2d7c"
+    }
+  ],
+  "queries": [
+    {
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "cd4fde37-a9b4-4c5b-9b83-01029f18b4b3"
+      },
+      "text": "AggregatedData\n| sort by BikepointID\n| render columnchart with (ycolumns=No_Bikes,xcolumn=BikepointID)",
+      "id": "a38a4d36-ba39-4ee9-8ae8-a260f93188ff",
+      "usedVariables": []
+    },
+    {
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "cd4fde37-a9b4-4c5b-9b83-01029f18b4b3"
+      },
+      "text": "RawData\n| where Timestamp > ago(1h)",
+      "id": "6394b503-6c9b-49bc-a0d5-fd9991278ab0",
+      "usedVariables": []
+    },
+    {
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "cd4fde37-a9b4-4c5b-9b83-01029f18b4b3"
+      },
+      "text": "RawData\n| where Neighbourhood == \"Chelsea\"\n| summarize max(No_Bikes) by Street",
+      "id": "c4534635-b744-494a-8b0f-ef57acaea8f8",
+      "usedVariables": []
+    }
+  ]
+}

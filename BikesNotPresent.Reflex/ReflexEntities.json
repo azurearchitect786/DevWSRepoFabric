@@ -1,0 +1,55 @@
+[
+  {
+    "uniqueIdentifier": "14e594b8-bca7-4704-a35f-9a322c0a163d",
+    "payload": {
+      "name": "BicyclesStream",
+      "type": "eventstreams"
+    },
+    "type": "container-v1"
+  },
+  {
+    "uniqueIdentifier": "c2935a78-1f8c-46c5-8626-5f922a9f936e",
+    "payload": {
+      "name": "EventStream",
+      "metadata": {
+        "eventstreamArtifactId": "6ba19cf8-4325-4795-b0db-a3a7cabdf34d"
+      },
+      "parentContainer": {
+        "targetUniqueIdentifier": "14e594b8-bca7-4704-a35f-9a322c0a163d"
+      }
+    },
+    "type": "eventstreamSource-v1"
+  },
+  {
+    "uniqueIdentifier": "9428b788-f205-409f-89c5-d0db7baf45e8",
+    "payload": {
+      "name": "BicyclesStream-stream event",
+      "parentContainer": {
+        "targetUniqueIdentifier": "14e594b8-bca7-4704-a35f-9a322c0a163d"
+      },
+      "definition": {
+        "type": "Event",
+        "instance": "{\"templateId\":\"SourceEvent\",\"templateVersion\":\"1.1\",\"steps\":[{\"name\":\"SourceEventStep\",\"id\":\"c10fda6a-7730-4ab6-b5a5-c141b3da92e4\",\"rows\":[{\"name\":\"SourceSelector\",\"kind\":\"SourceReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"c2935a78-1f8c-46c5-8626-5f922a9f936e\"}]}]}]}"
+      }
+    },
+    "type": "timeSeriesView-v1"
+  },
+  {
+    "uniqueIdentifier": "1a01341e-f73e-43ee-bc2a-0f2ec363bffa",
+    "payload": {
+      "name": "BicyclesStream-stream alert",
+      "parentContainer": {
+        "targetUniqueIdentifier": "14e594b8-bca7-4704-a35f-9a322c0a163d"
+      },
+      "definition": {
+        "type": "Rule",
+        "instance": "{\"templateId\":\"EventTrigger\",\"templateVersion\":\"1.1\",\"steps\":[{\"name\":\"FieldsDefaultsStep\",\"id\":\"a848af8f-fabb-41ab-9ce8-6f93d737faac\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"9428b788-f205-409f-89c5-d0db7baf45e8\"}],\"name\":\"event\"}]}]},{\"name\":\"EventDetectStep\",\"id\":\"f11e469c-9851-4115-b809-56876182d7ec\",\"rows\":[{\"name\":\"EventFieldSelector\",\"kind\":\"EventField\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"No_Bikes\"}]},{\"name\":\"NumberValueCondition\",\"kind\":\"NumberValueCondition\",\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"IsLessThan\"},{\"name\":\"threshold\",\"type\":\"number\",\"value\":0.0}]}]},{\"name\":\"ActStep\",\"id\":\"baaa2f33-00a7-4918-b52a-77cb7101ced3\",\"rows\":[{\"name\":\"EmailBinding\",\"kind\":\"EmailMessage\",\"arguments\":[{\"name\":\"messageLocale\",\"type\":\"string\",\"value\":\"\"},{\"name\":\"sentTo\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"ds01_adam@azurearchitect8gmail.onmicrosoft.com\"}]},{\"name\":\"copyTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"bCCTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"subject\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"Activator Trigger: New event from BicyclesStream-stream\"}]},{\"name\":\"headline\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"New event from BicyclesStream-stream\"}]},{\"name\":\"optionalMessage\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"\"}]},{\"name\":\"additionalInformation\",\"type\":\"array\",\"values\":[]}]}]}]}",
+        "settings": {
+          "shouldRun": true,
+          "shouldApplyRuleOnUpdate": false
+        }
+      }
+    },
+    "type": "timeSeriesView-v1"
+  }
+]

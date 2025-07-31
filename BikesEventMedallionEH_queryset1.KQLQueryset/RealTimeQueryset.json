@@ -1,0 +1,22 @@
+{
+  "queryset": {
+    "version": "1.0.0",
+    "dataSources": [
+      {
+        "id": "99ee78ff-258d-4e47-8319-fb59b9d09ed4",
+        "clusterUri": "",
+        "type": "Fabric",
+        "databaseItemId": "975cd672-8a0d-b33b-416d-064892d29f7e",
+        "databaseItemName": "BikesEventMedallionEH"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "d79c517a-368b-461d-8444-4bb14e80ed94",
+        "content": ".alter table RawData (BikepointID:string,Street:string,Neighbourhood:string,Latitude:double,Longitude:double,No_Bikes:long,No_Empty_Docks:long,Timestamp:datetime) with (folder=\"Bronze\")\n\n.alter table TransformedData (BikepointID: int, Street: string, Neighbourhood: string, Latitude: double, Longitude: double, No_Bikes: long, No_Empty_Docks: long, Timestamp: datetime, BikesToBeFilled: long, Action: string) with (folder=\"Silver\")\n\n.create-or-alter function TransformRawData() {\nRawData\n| parse BikepointID with * \"BikePoints_\" BikepointID:int\n| extend BikesToBeFilled = No_Empty_Docks - No_Bikes\n| extend Action = iff(BikesToBeFilled > 0, tostring(BikesToBeFilled), \"NA\")\n }\n\n .alter table TransformedData policy update\n```[{\n    \"IsEnabled\": true,\n    \"Source\": \"RawData\",\n    \"Query\": \"TransformRawData()\",\n    \"IsTransactional\": false,\n    \"PropagateIngestionProperties\": false\n}]```\n\nRawData\n| take 10\n\nTransformedData\n| take 10\n\nTransformedData\n| where BikepointID > 100 and Neighbourhood == \"Chelsea\"\n| project Timestamp, No_Bikes\n| render timechart\n\n.create-or-alter materialized-view with (folder=\"Gold\") AggregatedData on table TransformedData\n{\n   TransformedData\n   | summarize arg_max(Timestamp,No_Bikes) by BikepointID\n}\n\nAggregatedData\n| sort by BikepointID\n| render columnchart with (ycolumns=No_Bikes,xcolumn=BikepointID)\n\nSELECT top(10) *\nFROM AggregatedData\nORDER BY No_Bikes DESC\n\nexplain\nSELECT top(10) *\nFROM AggregatedData\nORDER BY No_Bikes DESC\n\nAggregatedData\n| sort by BikepointID\n| render columnchart with (ycolumns=No_Bikes,xcolumn=BikepointID)\n\nRawData\n| summarize arg_max(Timestamp, No_Bikes,  No_Empty_Docks, Neighbourhood, Lat=todouble(Latitude), Lon=todouble(Longitude)) by BikepointID",
+        "title": "Tab",
+        "dataSourceId": "99ee78ff-258d-4e47-8319-fb59b9d09ed4"
+      }
+    ]
+  }
+}
